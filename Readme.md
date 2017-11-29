@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Олег  Сурков](https://up.htmlacademy.ru/javascript/11/user/581395).
-* Наставник: `Иван Чернышев`.
+* Наставник: `Евгений Лепёшкин`.
 
 ---
 
