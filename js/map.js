@@ -95,14 +95,15 @@ var createButtonFragment = function (advert) {
 
 var fillAdvTemplate = function (template, advert) {
   var temp = template.cloneNode(true);
+  var pTags = temp.querySelectorAll('p');
 
   temp.querySelector('h3').textContent = advert.offer.title;
-  temp.querySelector('p').textContent = advert.offer.address;
+  pTags[0].textContent = advert.offer.address;
   temp.querySelector('.popup__price').textContent = advert.offer.price + '\u20bd/ночь';
   temp.querySelector('h4').textContent = DICTTYPE[advert.offer.type];
-  temp.querySelectorAll('p')[2].textContent = advert.offer.rooms + ' комната для ' +  advert.offer.guests + ' гостей';
-  temp.querySelectorAll('p')[3].textContent = 'Заезд после ' + advert.offer.checkin + ' , выезд до ' + advert.offer.checkout;
-  temp.querySelectorAll('p')[4].textContent = advert.offer.description;
+  pTags[2].textContent = advert.offer.rooms + ' комната для ' +  advert.offer.guests + ' гостей';
+  pTags[3].textContent = 'Заезд после ' + advert.offer.checkin + ' , выезд до ' + advert.offer.checkout;
+  pTags[4].textContent = advert.offer.description;
   temp.querySelector('.popup__avatar').src = advert.author.avatar;
 
   var featureList = temp.querySelector('.popup__features');
@@ -138,7 +139,7 @@ tagToInsert.appendChild(fragment);
 
 var template = document.getElementsByTagName('template')[0].content.querySelector('article.map__card');
 var insertBeforeElement = document.querySelector('.map__filters-container');
-var filledTemlate = fillAdvTemplate(template, advertisings[0]);
+var filledTemplate = fillAdvTemplate(template, advertisings[0]);
 
-insertBeforeElement.parentNode.insertBefore(filledTemlate, insertBeforeElement);
+insertBeforeElement.parentNode.insertBefore(filledTemplate, insertBeforeElement);
 
