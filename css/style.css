@@ -268,18 +268,21 @@ textarea:focus
     border-bottom: 0;
 }
 
-.map__pin:active
+.map__pin:active,
+.map__pin--active
 {
     outline: none;
 }
 
-.map__pin:active img
+.map__pin:active img,
+.map__pin--active img
 {
     background-color: #ff5635;
     box-shadow: 0 0 10px 10px rgba(255, 86, 53, .7);
 }
 
-.map__pin:active::after
+.map__pin:active::after,
+.map__pin--active::after
 {
     border-top-color: #ff5635;
 }
@@ -309,7 +312,8 @@ textarea:focus
     background: #fff;
 }
 
-.map__pin--main:active img
+.map__pin--main:active img,
+.map__pin--main--active img
 {
     background: #fff;
 }
@@ -327,6 +331,8 @@ textarea:focus
     transition: transform 300ms ease-in;
     transform: rotate(120deg) scale(0);
     transform-origin: 78px 78px;
+
+    will-change: transform;
 }
 
 .map__pin--main::after
@@ -336,6 +342,8 @@ textarea:focus
 
     border-top-width: 22px;
     border-top-color: #ff5635;
+
+    will-change: transform;
 }
 
 .map--faded .map__pin--main svg
@@ -368,6 +376,8 @@ textarea:focus
 
     opacity: 0;
     background: rgba(0, 0, 0, .3);
+
+    will-change: transform;
 }
 
 .map--faded .map__pinsoverlay
