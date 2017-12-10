@@ -101,7 +101,7 @@ var fillAdvTemplate = function (template, advert) {
   pTags[0].textContent = advert.offer.address;
   temp.querySelector('.popup__price').textContent = advert.offer.price + '\u20bd/ночь';
   temp.querySelector('h4').textContent = DICTTYPE[advert.offer.type];
-  pTags[2].textContent = advert.offer.rooms + ' комната для ' +  advert.offer.guests + ' гостей';
+  pTags[2].textContent = advert.offer.rooms + ' комната для ' + advert.offer.guests + ' гостей';
   pTags[3].textContent = 'Заезд после ' + advert.offer.checkin + ' , выезд до ' + advert.offer.checkout;
   pTags[4].textContent = advert.offer.description;
   temp.querySelector('.popup__avatar').src = advert.author.avatar;
@@ -119,27 +119,70 @@ var fillAdvTemplate = function (template, advert) {
   return temp;
 };
 
+// Interactions
+var deactivateFormFields = function () {
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = true;
+  }
+};
+
+var activateFormFields = function () {
+  document.querySelector('.map').classList.remove('map--faded');
+  document.querySelector('form.notice__form').classList.remove('notice__form--disabled');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = false;
+  }
+};
+
+var displayLookAlikeAds = function () {
+  var tagMap = document.querySelector('section.map');
+  tagMap.classList.remove('map--faded');
+
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < advertisings.length; i++) {
+    fragment.appendChild(createButtonFragment(advertisings[i]));
+  }
+
+  var tagToInsert = document.querySelector('.map__pins');
+  tagToInsert.appendChild(fragment);
+
+  var mapPins = tagToInsert.querySelectorAll('.map__pin');
+
+  for (i = 0; i < mapPins.length; i++) {
+    mapPins[i].addEventListener('click', onMapPinClick);
+  }
+};
+
+var onMapPinClick = function (event) {
+  document.querySelector('.map__pin--active').classList.remove('map__pin--active');
+  event.target.classList.add('map__pin--active');
+  // todo: нужна функция, возвращающая индекс кликнутого элемента в массиве advertisings
+  var filledTemplate = fillAdvTemplate(popupTemplate, advertisings[0]);
+  insertPopupBefore.parentNode.insertBefore(filledTemplate, insertPopupBefore);
+};
+
+// EventHandlers
+var onMapPinMouseUp = function () {
+  activateFormFields();
+  displayLookAlikeAds();
+};
+
+var fieldsets = document.querySelectorAll('form.notice__form fieldset');
+deactivateFormFields();
+
+var mapPinMain = document.querySelector('.map__pin--main');
+mapPinMain.addEventListener('mouseup', onMapPinMouseUp);
+
+// глобальная переменная для всех pins
+// var mapPins;
+
 var avatarNumbers = generateRandomIntArray(1, 8);
-var checkinIndex = generateRandomIntArray(0, OFFERCHECKIN.length - 1);
-var checkoutIndex = generateRandomIntArray(0, OFFERCHECKOUT.length - 1);
 var offerTitleIndex = generateRandomIntArray(0, OFFERTITLES.length - 1);
 var advertisings = getAdvertisings(OFFERTITLES.length);
 
-var tagMap = document.querySelector('section.map');
-tagMap.classList.remove('map--faded');
+var popupTemplate = document.getElementsByTagName('template')[0].content.querySelector('article.map__card');
+popupTemplate.classList.add('hidden');
+var insertPopupBefore = document.querySelector('.map__filters-container');
 
-var fragment = document.createDocumentFragment();
-
-for (var i = 0; i < advertisings.length; i++) {
-  fragment.appendChild(createButtonFragment(advertisings[i]));
-}
-
-var tagToInsert = document.querySelector('.map__pins');
-tagToInsert.appendChild(fragment);
-
-var template = document.getElementsByTagName('template')[0].content.querySelector('article.map__card');
-var insertBeforeElement = document.querySelector('.map__filters-container');
-var filledTemplate = fillAdvTemplate(template, advertisings[0]);
-
-insertBeforeElement.parentNode.insertBefore(filledTemplate, insertBeforeElement);
 
