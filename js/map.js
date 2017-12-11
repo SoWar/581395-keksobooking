@@ -134,45 +134,51 @@ var activateFormFields = function () {
   }
 };
 
-var displayLookAlikeAds = function () {
-  var tagMap = document.querySelector('section.map');
-  tagMap.classList.remove('map--faded');
-
+var insertButtonsFragment = function () {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < advertisings.length; i++) {
     fragment.appendChild(createButtonFragment(advertisings[i]));
   }
 
-  var tagToInsert = document.querySelector('.map__pins');
-  tagToInsert.appendChild(fragment);
+  document.querySelector('.map__pins').appendChild(fragment);
+};
 
-  var mapPins = tagToInsert.querySelectorAll('.map__pin');
+var displayLookAlikeAds = function () {
+  insertButtonsFragment();
+  var mapPins = document.querySelectorAll('.map__pin');
 
-  for (i = 0; i < mapPins.length; i++) {
+  for (var i = 0; i < mapPins.length; i++) {
+    // todo: не вешать событие на главную кнопку
     mapPins[i].addEventListener('click', onMapPinClick);
   }
 };
 
-var onMapPinClick = function (event) {
+var setPinActive = function (pin) {
   document.querySelector('.map__pin--active').classList.remove('map__pin--active');
   event.target.classList.add('map__pin--active');
-  // todo: нужна функция, возвращающая индекс кликнутого элемента в массиве advertisings
-  var filledTemplate = fillAdvTemplate(popupTemplate, advertisings[0]);
-  insertPopupBefore.parentNode.insertBefore(filledTemplate, insertPopupBefore);
 };
 
 // EventHandlers
-var onMapPinMouseUp = function () {
+var onMainPinMouseUp = function () {
   activateFormFields();
   displayLookAlikeAds();
+  // todo закрывать попап т.к. нет информации для отображения
+};
+
+var onMapPinClick = function (event) {
+  setPinActive(event.target);
+
+  // todo: нужна функция, возвращающая индекс кликнутого элемента в массиве advertisings
+  var filledTemplate = fillAdvTemplate(popupTemplate, advertisings[0]);
+  insertPopupBefore.parentNode.insertBefore(filledTemplate, insertPopupBefore);
 };
 
 var fieldsets = document.querySelectorAll('form.notice__form fieldset');
 deactivateFormFields();
 
 var mapPinMain = document.querySelector('.map__pin--main');
-mapPinMain.addEventListener('mouseup', onMapPinMouseUp);
+mapPinMain.addEventListener('mouseup', onMainPinMouseUp);
 
 // глобальная переменная для всех pins
 // var mapPins;
@@ -181,7 +187,7 @@ var avatarNumbers = generateRandomIntArray(1, 8);
 var offerTitleIndex = generateRandomIntArray(0, OFFERTITLES.length - 1);
 var advertisings = getAdvertisings(OFFERTITLES.length);
 
-var popupTemplate = document.getElementsByTagName('template')[0].content.querySelector('article.map__card');
+var popupTemplate = document.querySelector('template').content.querySelector('article.map__card');
 popupTemplate.classList.add('hidden');
 var insertPopupBefore = document.querySelector('.map__filters-container');
 
