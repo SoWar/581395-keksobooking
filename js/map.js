@@ -101,7 +101,7 @@ var fillAdvTemplate = function (template, advert) {
   pTags[0].textContent = advert.offer.address;
   temp.querySelector('.popup__price').textContent = advert.offer.price + '\u20bd/ночь';
   temp.querySelector('h4').textContent = DICTTYPE[advert.offer.type];
-  pTags[2].textContent = advert.offer.rooms + ' комната для ' +  advert.offer.guests + ' гостей';
+  pTags[2].textContent = advert.offer.rooms + ' комната для ' + advert.offer.guests + ' гостей';
   pTags[3].textContent = 'Заезд после ' + advert.offer.checkin + ' , выезд до ' + advert.offer.checkout;
   pTags[4].textContent = advert.offer.description;
   temp.querySelector('.popup__avatar').src = advert.author.avatar;
@@ -119,6 +119,16 @@ var fillAdvTemplate = function (template, advert) {
   return temp;
 };
 
+var insertButtonsFragment = function () {
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < advertisings.length; i++) {
+    fragment.appendChild(createButtonFragment(advertisings[i]));
+  }
+
+  document.querySelector('.map__pins').appendChild(fragment);
+};
+
 var avatarNumbers = generateRandomIntArray(1, 8);
 var checkinIndex = generateRandomIntArray(0, OFFERCHECKIN.length - 1);
 var checkoutIndex = generateRandomIntArray(0, OFFERCHECKOUT.length - 1);
@@ -128,16 +138,9 @@ var advertisings = getAdvertisings(OFFERTITLES.length);
 var tagMap = document.querySelector('section.map');
 tagMap.classList.remove('map--faded');
 
-var fragment = document.createDocumentFragment();
+insertButtonsFragment();
 
-for (var i = 0; i < advertisings.length; i++) {
-  fragment.appendChild(createButtonFragment(advertisings[i]));
-}
-
-var tagToInsert = document.querySelector('.map__pins');
-tagToInsert.appendChild(fragment);
-
-var template = document.getElementsByTagName('template')[0].content.querySelector('article.map__card');
+var template = document.querySelector('template').content.querySelector('article.map__card');
 var insertBeforeElement = document.querySelector('.map__filters-container');
 var filledTemplate = fillAdvTemplate(template, advertisings[0]);
 
