@@ -130,8 +130,6 @@ var insertButtonsFragment = function () {
 };
 
 var avatarNumbers = generateRandomIntArray(1, 8);
-var checkinIndex = generateRandomIntArray(0, OFFERCHECKIN.length - 1);
-var checkoutIndex = generateRandomIntArray(0, OFFERCHECKOUT.length - 1);
 var offerTitleIndex = generateRandomIntArray(0, OFFERTITLES.length - 1);
 var advertisings = getAdvertisings(OFFERTITLES.length);
 
