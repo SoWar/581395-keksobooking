@@ -1,5 +1,7 @@
 'use strict';
 
+var ESCAPE_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 var OFFERTITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец',
   'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
   'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
@@ -154,6 +156,7 @@ var displayLookAlikeAds = function () {
   for (var i = 0; i < mapPins.length; i++) {
     // todo: не вешать событие на главную кнопку
     mapPins[i].addEventListener('click', onMapPinClick);
+    mapPins[i].addEventListener('keydown', onMapPinKeydown);
   }
 };
 
@@ -176,6 +179,7 @@ var displayActivePinPopup = function (pin) {
 
 var closePopup = function () {
   popupTemplate.classList.add('hidden');
+  // todo: деактивировать статус фктивный у соответствующего пина
 };
 
 // EventHandlers
@@ -190,21 +194,37 @@ var onMapPinClick = function (event) {
   displayActivePinPopup(event.currentTarget);
 };
 
+var onMapPinKeydown = function (event) {
+  if (event.keyCode === ENTER_KEYCODE) {
+    onMapPinClick(event);
+  }
+};
+
+var onPopupCloseClick = function () {
+  closePopup();
+};
+
+var onPopupCloseKeydown = function (event) {
+  if (event.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+};
+
 var fieldsets = document.querySelectorAll('form.notice__form fieldset');
 deactivateFormFields();
 
 var mapPinMain = document.querySelector('.map__pin--main');
 mapPinMain.addEventListener('mouseup', onMainPinMouseUp);
 
-// глобальная переменная для всех pins
-// var mapPins;
-
 var avatarNumbers = generateRandomIntArray(1, 8);
 var offerTitleIndex = generateRandomIntArray(0, OFFERTITLES.length - 1);
 var advertisings = getAdvertisings(OFFERTITLES.length);
 
 var popupTemplate = document.querySelector('template').content.querySelector('article.map__card');
-// closePopup();
 var insertPopupBefore = document.querySelector('.map__filters-container');
+
+var buttonPopupClose = popupTemplate.querySelector('.popup__close');
+buttonPopupClose.addEventListener('click', onPopupCloseClick);
+buttonPopupClose.addEventListener('keydown', onPopupCloseKeydown);
 
 
