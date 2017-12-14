@@ -179,6 +179,7 @@ var displayActivePinPopup = function (pin) {
 
 var closePopup = function () {
   popupTemplate.classList.add('hidden');
+  document.querySelector('.map__pin--active').classList.remove('map__pin--active');
   // todo: деактивировать статус фктивный у соответствующего пина
 };
 
