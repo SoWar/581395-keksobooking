@@ -179,8 +179,10 @@ var displayActivePinPopup = function (pin) {
 
 var closePopup = function () {
   popupTemplate.classList.add('hidden');
-  document.querySelector('.map__pin--active').classList.remove('map__pin--active');
-  // todo: деактивировать статус фктивный у соответствующего пина
+  var activePin = document.querySelector('.map__pin--active');
+  if (activePin) {
+    activePin.classList.remove('map__pin--active');
+  }
 };
 
 // EventHandlers
@@ -211,6 +213,12 @@ var onPopupCloseKeydown = function (event) {
   }
 };
 
+var onEscapeKeydown = function (event) {
+  if (event.keyCode === ESCAPE_KEYCODE) {
+    closePopup();
+  }
+};
+
 var fieldsets = document.querySelectorAll('form.notice__form fieldset');
 deactivateFormFields();
 
@@ -227,5 +235,6 @@ var insertPopupBefore = document.querySelector('.map__filters-container');
 var buttonPopupClose = popupTemplate.querySelector('.popup__close');
 buttonPopupClose.addEventListener('click', onPopupCloseClick);
 buttonPopupClose.addEventListener('keydown', onPopupCloseKeydown);
+document.addEventListener('keydown', onEscapeKeydown);
 
 
