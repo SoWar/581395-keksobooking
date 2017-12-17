@@ -5,14 +5,27 @@ var ENTER_KEYCODE = 13;
 var OFFERTITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец',
   'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
   'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
-var OFFERTYPE = ['flat', 'house', 'bungalo'];
+var OFFERTYPE = ['flat', 'house', 'bungalo', 'palace'];
 var OFFERCHECKIN = ['12:00', '13:00', '14:00'];
 var OFFERCHECKOUT = ['12:00', '13:00', '14:00'];
 var OFFERFEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var DICTTYPE = {
   flat: 'Квартира',
   house: 'Дом',
-  bungalo: 'Бунгало'
+  bungalo: 'Бунгало',
+  palace: 'Дворец'
+};
+var MIN_PRICE_RESIDENCE = {
+  flat: 1000,
+  house: 5000,
+  bungalo: 0,
+  palace: 10000
+};
+var CAPACITY_RULES = {
+  '3': ['3', '2', '1'],
+  '2': ['2', '1'],
+  '1': ['1'],
+  '100': ['0']
 };
 
 
@@ -185,6 +198,33 @@ var closePopup = function () {
   }
 };
 
+var changeMinResidencePrice = function (type) {
+  var inputPrice = document.querySelector('#price');
+  inputPrice.min = MIN_PRICE_RESIDENCE[type];
+};
+
+var syncInOutTime = function (target) {
+  if (target.id === 'timein') {
+    inputTimeOut.selectedIndex = target.selectedIndex;
+  } else {
+    inputTimeIn.selectedIndex = target.selectedIndex;
+  }
+};
+
+var setActiveCapacityOptions = function (roomsNumber) {
+
+  while (inputCapacity.firstChild) {
+    inputCapacity.removeChild(inputCapacity.firstChild);
+  }
+
+  [].forEach.call(inputCapacityClone.children, function (item) {
+    if (CAPACITY_RULES[roomsNumber].indexOf(item.value) > -1) {
+      item.selected = item.value === CAPACITY_RULES[roomsNumber][0] ? true : false;
+      inputCapacity.appendChild(item.cloneNode(true));
+    }
+  });
+};
+
 // EventHandlers
 var onMainPinMouseUp = function () {
   activateFormFields();
@@ -219,6 +259,18 @@ var onEscapeKeydown = function (event) {
   }
 };
 
+var onResidenceTypeSelect = function (event) {
+  changeMinResidencePrice(event.target.selectedOptions[0].value);
+};
+
+var onTimeInOutChange = function (event) {
+  syncInOutTime(event.target);
+};
+
+var onRoomNumberChange = function (event) {
+  setActiveCapacityOptions(event.target.selectedOptions[0].value);
+};
+
 var fieldsets = document.querySelectorAll('form.notice__form fieldset');
 deactivateFormFields();
 
@@ -237,4 +289,20 @@ buttonPopupClose.addEventListener('click', onPopupCloseClick);
 buttonPopupClose.addEventListener('keydown', onPopupCloseKeydown);
 document.addEventListener('keydown', onEscapeKeydown);
 
+var inputResidenceType = document.querySelector('#type');
+inputResidenceType.addEventListener('change', onResidenceTypeSelect);
+changeMinResidencePrice(inputResidenceType.selectedOptions[0].value);
+
+var inputTimeIn = document.querySelector('#timein');
+var inputTimeOut = document.querySelector('#timeout');
+inputTimeIn.addEventListener('change', onTimeInOutChange);
+inputTimeOut.addEventListener('change', onTimeInOutChange);
+
+var inputRoomNumber = document.querySelector('#room_number');
+inputRoomNumber.addEventListener('change', onRoomNumberChange);
+
+var inputCapacity = document.querySelector('#capacity');
+var inputCapacityClone = inputCapacity.cloneNode(true);
+inputCapacityClone.querySelector('option[selected]').removeAttribute('selected');
+setActiveCapacityOptions(inputRoomNumber.selectedOptions[0].value);
 
