@@ -159,9 +159,8 @@ var displayLookAlikeAds = function () {
   var mapPins = document.querySelectorAll('.map__pin');
 
   for (var i = 0; i < mapPins.length; i++) {
-    // todo: не вешать событие на главную кнопку
     mapPins[i].addEventListener('click', onMapPinClick);
-    mapPins[i].addEventListener('keydown', onMapPinKeydown);
+    // mapPins[i].addEventListener('keydown', onMapPinKeydown);
   }
 };
 
@@ -233,11 +232,11 @@ var onMapPinClick = function (evnt) {
   displayActivePinPopup(evnt.currentTarget);
 };
 
-var onMapPinKeydown = function (evnt) {
-  if (evnt.keyCode === ENTER_KEYCODE) {
-    onMapPinClick(evnt);
-  }
-};
+// var onMapPinKeydown = function (evnt) {
+//   if (evnt.keyCode === ENTER_KEYCODE) {
+//     onMapPinClick(evnt);
+//   }
+// };
 
 var onPopupCloseClick = function () {
   closePopup();
