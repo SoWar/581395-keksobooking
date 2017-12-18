@@ -160,7 +160,6 @@ var displayLookAlikeAds = function () {
 
   for (var i = 0; i < mapPins.length; i++) {
     mapPins[i].addEventListener('click', onMapPinClick);
-    // mapPins[i].addEventListener('keydown', onMapPinKeydown);
   }
 };
 
@@ -231,12 +230,6 @@ var onMapPinClick = function (evnt) {
   setPinActive(evnt.currentTarget);
   displayActivePinPopup(evnt.currentTarget);
 };
-
-// var onMapPinKeydown = function (evnt) {
-//   if (evnt.keyCode === ENTER_KEYCODE) {
-//     onMapPinClick(evnt);
-//   }
-// };
 
 var onPopupCloseClick = function () {
   closePopup();
