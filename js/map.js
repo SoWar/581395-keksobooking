@@ -84,6 +84,7 @@ var createButtonFragment = function (id, advert) {
   buttonElement.style.left = advert.location.x + 'px';
   buttonElement.style.top = (advert.location.y - Math.round(44 / 2 + 18)) + 'px';
   buttonElement.data = id;
+  buttonElement.tabIndex = 0;
 
   var imgElement = document.createElement('img');
   imgElement.width = 40;
@@ -125,12 +126,6 @@ var fillAdvTemplate = function (template, advert) {
 };
 
 // Interactions
-var deactivateFormFields = function () {
-  for (var i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].disabled = true;
-  }
-};
-
 var activateFormFields = function () {
   document.querySelector('.map').classList.remove('map--faded');
   document.querySelector('form.notice__form').classList.remove('notice__form--disabled');
@@ -220,7 +215,6 @@ var onEscapeKeydown = function (event) {
 };
 
 var fieldsets = document.querySelectorAll('form.notice__form fieldset');
-deactivateFormFields();
 
 var mapPinMain = document.querySelector('.map__pin--main');
 mapPinMain.addEventListener('mouseup', onMainPinMouseUp);
