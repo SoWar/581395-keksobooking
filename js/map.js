@@ -5,14 +5,27 @@ var ENTER_KEYCODE = 13;
 var OFFERTITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец',
   'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
   'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
-var OFFERTYPE = ['flat', 'house', 'bungalo'];
+var OFFERTYPE = ['flat', 'house', 'bungalo', 'palace'];
 var OFFERCHECKIN = ['12:00', '13:00', '14:00'];
 var OFFERCHECKOUT = ['12:00', '13:00', '14:00'];
 var OFFERFEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var DICTTYPE = {
   flat: 'Квартира',
   house: 'Дом',
-  bungalo: 'Бунгало'
+  bungalo: 'Бунгало',
+  palace: 'Дворец'
+};
+var MIN_PRICE_RESIDENCE = {
+  flat: 1000,
+  house: 5000,
+  bungalo: 0,
+  palace: 10000
+};
+var CAPACITY_RULES = {
+  '3': ['3', '2', '1'],
+  '2': ['2', '1'],
+  '1': ['1'],
+  '100': ['0']
 };
 
 
@@ -98,21 +111,18 @@ var createButtonFragment = function (id, advert) {
 };
 
 var fillAdvTemplate = function (template, advert) {
-  // todo: correct variable usage
-  // var temp = template.cloneNode(true);
-  var temp = template;
-  var pTags = temp.querySelectorAll('p');
+  var pTags = template.querySelectorAll('p');
 
-  temp.querySelector('h3').textContent = advert.offer.title;
+  template.querySelector('h3').textContent = advert.offer.title;
   pTags[0].textContent = advert.offer.address;
-  temp.querySelector('.popup__price').textContent = advert.offer.price + '\u20bd/ночь';
-  temp.querySelector('h4').textContent = DICTTYPE[advert.offer.type];
+  template.querySelector('.popup__price').textContent = advert.offer.price + '\u20bd/ночь';
+  template.querySelector('h4').textContent = DICTTYPE[advert.offer.type];
   pTags[2].textContent = advert.offer.rooms + ' комната для ' + advert.offer.guests + ' гостей';
   pTags[3].textContent = 'Заезд после ' + advert.offer.checkin + ' , выезд до ' + advert.offer.checkout;
   pTags[4].textContent = advert.offer.description;
-  temp.querySelector('.popup__avatar').src = advert.author.avatar;
+  template.querySelector('.popup__avatar').src = advert.author.avatar;
 
-  var featureList = temp.querySelector('.popup__features');
+  var featureList = template.querySelector('.popup__features');
   while (featureList.firstChild) {
     featureList.removeChild(featureList.firstChild);
   }
@@ -122,7 +132,7 @@ var fillAdvTemplate = function (template, advert) {
     li.className = 'feature feature--' + advert.offer.features[i];
     featureList.appendChild(li);
   }
-  return temp;
+  return template;
 };
 
 // Interactions
@@ -149,9 +159,7 @@ var displayLookAlikeAds = function () {
   var mapPins = document.querySelectorAll('.map__pin');
 
   for (var i = 0; i < mapPins.length; i++) {
-    // todo: не вешать событие на главную кнопку
     mapPins[i].addEventListener('click', onMapPinClick);
-    mapPins[i].addEventListener('keydown', onMapPinKeydown);
   }
 };
 
@@ -180,6 +188,37 @@ var closePopup = function () {
   }
 };
 
+var changeMinResidencePrice = function (type) {
+  var inputPrice = document.querySelector('#price');
+  inputPrice.min = MIN_PRICE_RESIDENCE[type];
+};
+
+var syncInOutTime = function (target) {
+  if (target.id === 'timein') {
+    inputTimeOut.selectedIndex = target.selectedIndex;
+  } else {
+    inputTimeIn.selectedIndex = target.selectedIndex;
+  }
+};
+
+var setActiveCapacityOptions = function (roomsNumber) {
+
+  while (inputCapacity.firstChild) {
+    inputCapacity.removeChild(inputCapacity.firstChild);
+  }
+
+  var temp = document.createDocumentFragment();
+
+  [].forEach.call(inputCapacityClone.children, function (item) {
+    if (CAPACITY_RULES[roomsNumber].indexOf(item.value) > -1) {
+      item.selected = item.value === CAPACITY_RULES[roomsNumber][0] ? true : false;
+      temp.appendChild(item.cloneNode(true));
+    }
+  });
+
+  inputCapacity.appendChild(temp);
+};
+
 // EventHandlers
 var onMainPinMouseUp = function () {
   activateFormFields();
@@ -187,31 +226,37 @@ var onMainPinMouseUp = function () {
   closePopup();
 };
 
-var onMapPinClick = function (event) {
-  setPinActive(event.currentTarget);
-  displayActivePinPopup(event.currentTarget);
-};
-
-var onMapPinKeydown = function (event) {
-  if (event.keyCode === ENTER_KEYCODE) {
-    onMapPinClick(event);
-  }
+var onMapPinClick = function (evnt) {
+  setPinActive(evnt.currentTarget);
+  displayActivePinPopup(evnt.currentTarget);
 };
 
 var onPopupCloseClick = function () {
   closePopup();
 };
 
-var onPopupCloseKeydown = function (event) {
-  if (event.keyCode === ENTER_KEYCODE) {
+var onPopupCloseKeydown = function (evnt) {
+  if (evnt.keyCode === ENTER_KEYCODE) {
     closePopup();
   }
 };
 
-var onEscapeKeydown = function (event) {
-  if (event.keyCode === ESCAPE_KEYCODE) {
+var onEscapeKeydown = function (evnt) {
+  if (evnt.keyCode === ESCAPE_KEYCODE) {
     closePopup();
   }
+};
+
+var onResidenceTypeSelect = function (evnt) {
+  changeMinResidencePrice(evnt.target.selectedOptions[0].value);
+};
+
+var onTimeInOutChange = function (evnt) {
+  syncInOutTime(evnt.target);
+};
+
+var onRoomNumberChange = function (evnt) {
+  setActiveCapacityOptions(evnt.target.selectedOptions[0].value);
 };
 
 var fieldsets = document.querySelectorAll('form.notice__form fieldset');
@@ -231,4 +276,20 @@ buttonPopupClose.addEventListener('click', onPopupCloseClick);
 buttonPopupClose.addEventListener('keydown', onPopupCloseKeydown);
 document.addEventListener('keydown', onEscapeKeydown);
 
+var inputResidenceType = document.querySelector('#type');
+inputResidenceType.addEventListener('change', onResidenceTypeSelect);
+changeMinResidencePrice(inputResidenceType.selectedOptions[0].value);
+
+var inputTimeIn = document.querySelector('#timein');
+var inputTimeOut = document.querySelector('#timeout');
+inputTimeIn.addEventListener('change', onTimeInOutChange);
+inputTimeOut.addEventListener('change', onTimeInOutChange);
+
+var inputRoomNumber = document.querySelector('#room_number');
+inputRoomNumber.addEventListener('change', onRoomNumberChange);
+
+var inputCapacity = document.querySelector('#capacity');
+var inputCapacityClone = inputCapacity.cloneNode(true);
+inputCapacityClone.querySelector('option[selected]').removeAttribute('selected');
+setActiveCapacityOptions(inputRoomNumber.selectedOptions[0].value);
 
