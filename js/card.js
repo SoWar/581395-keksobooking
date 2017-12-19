@@ -1,6 +1,21 @@
 'use strict';
 
 (function () {
+  var ESCAPE_KEYCODE = 27;
+  var ENTER_KEYCODE = 13;
+
+  var DICTTYPE = {
+    flat: 'Квартира',
+    house: 'Дом',
+    bungalo: 'Бунгало',
+    palace: 'Дворец'
+  };
+
+
+  var popupTemplate = document.querySelector('template').content.querySelector('article.map__card');
+  var buttonPopupClose = popupTemplate.querySelector('.popup__close');
+  var insertPopupBefore = document.querySelector('.map__filters-container');
+
   var fillAdvTemplate = function (template, advert) {
     var pTags = template.querySelectorAll('p');
 
@@ -26,20 +41,41 @@
     return template;
   };
 
-  var displayActivePinPopup = function (pin) {
-    if (pin.classList.contains('map__pin--main')) {
-      return;
+  window.card = {
+    closePopup: function () {
+      popupTemplate.classList.add('hidden');
+      var activePin = document.querySelector('.map__pin--active');
+      if (activePin) {
+        activePin.classList.remove('map__pin--active');
+      }
+    },
+    displayActivePinPopup: function (pin) {
+      if (pin.classList.contains('map__pin--main')) {
+        return;
+      }
+      popupTemplate.classList.remove('hidden');
+      var filledTemplate = fillAdvTemplate(popupTemplate, window.data.advertisings[pin.data]);
+      insertPopupBefore.parentNode.insertBefore(filledTemplate, insertPopupBefore);
     }
-    popupTemplate.classList.remove('hidden');
-    var filledTemplate = fillAdvTemplate(popupTemplate, advertisings[pin.data]);
-    insertPopupBefore.parentNode.insertBefore(filledTemplate, insertPopupBefore);
   };
 
-  var closePopup = function () {
-    popupTemplate.classList.add('hidden');
-    var activePin = document.querySelector('.map__pin--active');
-    if (activePin) {
-      activePin.classList.remove('map__pin--active');
+  var onPopupCloseClick = function () {
+    window.card.closePopup();
+  };
+
+  var onPopupCloseKeydown = function (evnt) {
+    if (evnt.keyCode === ENTER_KEYCODE) {
+      window.card.closePopup();
     }
   };
+
+  var onEscapeKeydown = function (evnt) {
+    if (evnt.keyCode === ESCAPE_KEYCODE) {
+      window.card.closePopup();
+    }
+  };
+
+  buttonPopupClose.addEventListener('click', onPopupCloseClick);
+  buttonPopupClose.addEventListener('keydown', onPopupCloseKeydown);
+  document.addEventListener('keydown', onEscapeKeydown);
 })();

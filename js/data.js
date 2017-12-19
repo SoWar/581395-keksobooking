@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var ESCAPE_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
   var OFFERTITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец',
     'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
     'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
@@ -10,12 +8,6 @@
   var OFFERCHECKIN = ['12:00', '13:00', '14:00'];
   var OFFERCHECKOUT = ['12:00', '13:00', '14:00'];
   var OFFERFEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-  var DICTTYPE = {
-    flat: 'Квартира',
-    house: 'Дом',
-    bungalo: 'Бунгало',
-    palace: 'Дворец'
-  };
 
   var getRandomNumber = function (min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
@@ -77,6 +69,14 @@
       ads[i] = generateAdvertising();
     }
     return ads;
+  };
+
+  var avatarNumbers = generateRandomIntArray(1, 8);
+  var offerTitleIndex = generateRandomIntArray(0, OFFERTITLES.length - 1);
+
+  window.data = {
+    advertisings: getAdvertisings(OFFERTITLES.length)
+
   };
 })();
 
