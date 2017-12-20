@@ -48,16 +48,6 @@
 
   var fieldsets = document.querySelectorAll('form.notice__form fieldset');
 
-  window.form = {
-    activateFormFields: function () {
-      document.querySelector('.map').classList.remove('map--faded');
-      document.querySelector('form.notice__form').classList.remove('notice__form--disabled');
-      for (var i = 0; i < fieldsets.length; i++) {
-        fieldsets[i].disabled = false;
-      }
-    }
-  };
-
   var onResidenceTypeSelect = function (evnt) {
     changeMinResidencePrice(evnt.target.selectedOptions[0].value);
   };
@@ -87,4 +77,13 @@
   inputCapacityClone.querySelector('option[selected]').removeAttribute('selected');
   setActiveCapacityOptions(inputRoomNumber.selectedOptions[0].value);
 
+  window.form = {
+    activateFormFields: function () {
+      document.querySelector('.map').classList.remove('map--faded');
+      document.querySelector('form.notice__form').classList.remove('notice__form--disabled');
+      for (var i = 0; i < fieldsets.length; i++) {
+        fieldsets[i].disabled = false;
+      }
+    }
+  };
 })();

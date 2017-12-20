@@ -30,6 +30,11 @@
     document.querySelector('.map__pins').appendChild(fragment);
   };
 
+  var onMapPinClick = function (evnt) {
+    window.pin.setPinActive(evnt.currentTarget);
+    window.card.displayActivePinPopup(evnt.currentTarget);
+  };
+
   window.pin = {
     displayLookAlikeAds: function () {
       insertButtonsFragment();
@@ -46,10 +51,5 @@
       }
       pin.classList.add('map__pin--active');
     }
-  };
-
-  var onMapPinClick = function (evnt) {
-    window.pin.setPinActive(evnt.currentTarget);
-    window.card.displayActivePinPopup(evnt.currentTarget);
   };
 })();
