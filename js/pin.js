@@ -1,11 +1,13 @@
 'use strict';
 
 (function () {
+  var PIN_POINTER_SHIFT_Y = Math.round(44 / 2 + 18);
+
   var createButtonFragment = function (id, advert) {
     var buttonElement = document.createElement('button');
     buttonElement.className = 'map__pin';
     buttonElement.style.left = advert.location.x + 'px';
-    buttonElement.style.top = (advert.location.y - Math.round(44 / 2 + 18)) + 'px';
+    buttonElement.style.top = (advert.location.y - PIN_POINTER_SHIFT_Y) + 'px';
     buttonElement.data = id;
     buttonElement.tabIndex = 0;
 
@@ -50,6 +52,7 @@
         activePin.classList.remove('map__pin--active');
       }
       pin.classList.add('map__pin--active');
-    }
+    },
+    PIN_POINTER_SHIFT_Y: PIN_POINTER_SHIFT_Y
   };
 })();

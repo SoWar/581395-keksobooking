@@ -77,6 +77,8 @@
   inputCapacityClone.querySelector('option[selected]').removeAttribute('selected');
   setActiveCapacityOptions(inputRoomNumber.selectedOptions[0].value);
 
+  var addressField = document.querySelector('#address');
+
   window.form = {
     activateFormFields: function () {
       document.querySelector('.map').classList.remove('map--faded');
@@ -84,6 +86,9 @@
       for (var i = 0; i < fieldsets.length; i++) {
         fieldsets[i].disabled = false;
       }
+    },
+    displayPinCoordinates: function (x, y) {
+      addressField.value = 'x:' + x + ', y:' + y;
     }
   };
 })();
