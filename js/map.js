@@ -3,6 +3,8 @@
 (function () {
   var MAX_Y = 500;
   var MIN_Y = 100;
+  var MAX_X = 1200;
+  var MIN_X = 0;
 
   var onMainPinMouseUp = function () {
     window.form.activateFormFields();
@@ -39,6 +41,12 @@
       }
 
       var x = mapPinMain.offsetLeft - shift.x;
+      if (x > MAX_X) {
+        x = MAX_X;
+      } else if (x < MIN_X) {
+        x = MIN_X;
+      }
+
       mapPinMain.style.top = y + 'px';
       mapPinMain.style.left = x + 'px';
 
