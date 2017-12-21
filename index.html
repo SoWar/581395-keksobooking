@@ -218,7 +218,7 @@
   </div>
 </footer>
 
-<template>
+<template class="card__template">
   <article class="map__card popup">
     <img src="img/avatars/user01.png" class="popup__avatar" width="70" height="70">
     <button class="popup__close">Закрыть</button>
@@ -244,10 +244,15 @@
 
   <button style="left: 200px; top: 400px;" class="map__pin"><img src="img/avatars/user07.png" width="40" height="40" draggable="false"></button>
 </template>
-<div class="error__popup">
-    <span class="error__popup close">&times;</span>
-    <p class="error__popup message">text</p>
-</div>
+
+<template class="error__template">
+  <div class="error__popup ">
+    <div class="error__popup--content">
+      <span class="error__popup--close">&times;</span>
+      <p class="error__popup--message"></p>
+    </div>
+  </div>
+</template>
 
 <script src="js/backend.js"></script>
 <script src="js/show-card.js"></script>

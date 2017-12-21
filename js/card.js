@@ -12,7 +12,7 @@
   };
 
 
-  var popupTemplate = document.querySelector('template').content.querySelector('article.map__card');
+  var popupTemplate = document.querySelector('template.card__template').content.querySelector('article.map__card');
   var buttonPopupClose = popupTemplate.querySelector('.popup__close');
   var insertPopupBefore = document.querySelector('.map__filters-container');
 
