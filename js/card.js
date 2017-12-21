@@ -1,4 +1,4 @@
-'use strict';
+
 
 (function () {
   var ESCAPE_KEYCODE = 27;
@@ -73,9 +73,8 @@
       if (pin.classList.contains('map__pin--main')) {
         return;
       }
-      popupTemplate.classList.remove('hidden');
       var filledTemplate = fillAdvTemplate(popupTemplate, window.data.advertisings[pin.data]);
-      insertPopupBefore.parentNode.insertBefore(filledTemplate, insertPopupBefore);
+      window.displayPopup(filledTemplate, insertPopupBefore);
     }
   };
 })();
