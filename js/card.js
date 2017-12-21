@@ -1,4 +1,4 @@
-
+'use strict';
 
 (function () {
   var ESCAPE_KEYCODE = 27;

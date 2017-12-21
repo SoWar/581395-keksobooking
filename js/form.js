@@ -13,6 +13,11 @@
     '1': ['1'],
     '100': ['0']
   };
+  var TIME_INOUT = {
+    '12:00': '12:00',
+    '13:00': '13:00',
+    '14:00': '14:00'
+  };
 
   var changeMinResidencePrice = function (type) {
     var inputPrice = document.querySelector('#price');
@@ -20,12 +25,13 @@
     inputPrice.placeholder = MIN_PRICE_RESIDENCE[type];
   };
 
-  var syncInOutTime = function (target) {
-    if (target.id === 'timein') {
-      inputTimeOut.selectedIndex = target.selectedIndex;
-    } else {
-      inputTimeIn.selectedIndex = target.selectedIndex;
-    }
+  var syncInOutTime = function (target, value) {
+    // if (target.id === 'timein') {
+    //   inputTimeOut.selectedIndex = target.selectedIndex;
+    // } else {
+    //   inputTimeIn.selectedIndex = target.selectedIndex;
+    // }
+    target.value = value;
   };
 
   var setActiveCapacityOptions = function (roomsNumber) {
@@ -52,8 +58,14 @@
     changeMinResidencePrice(evnt.target.selectedOptions[0].value);
   };
 
-  var onTimeInOutChange = function (evnt) {
-    syncInOutTime(evnt.target);
+  var onTimeInChange = function () {
+    window.synchronizeFields(inputTimeIn, inputTimeOut, TIME_INOUT, syncInOutTime);
+    // syncInOutTime(evnt.target);
+  };
+
+  var onTimeOutChange = function () {
+    window.synchronizeFields(inputTimeOut, inputTimeIn, TIME_INOUT, syncInOutTime);
+    // syncInOutTime(evnt.target);
   };
 
   var onRoomNumberChange = function (evnt) {
@@ -66,8 +78,8 @@
 
   var inputTimeIn = document.querySelector('#timein');
   var inputTimeOut = document.querySelector('#timeout');
-  inputTimeIn.addEventListener('change', onTimeInOutChange);
-  inputTimeOut.addEventListener('change', onTimeInOutChange);
+  inputTimeIn.addEventListener('change', onTimeInChange);
+  inputTimeOut.addEventListener('change', onTimeOutChange);
 
   var inputRoomNumber = document.querySelector('#room_number');
   inputRoomNumber.addEventListener('change', onRoomNumberChange);
