@@ -70,6 +70,13 @@
     window.synchronizeFields(inputRoomNumber, inputCapacity, CAPACITY_RULES, setActiveCapacityOptions);
   };
 
+  var setInitialPosition = function () {
+    var styles = window.getComputedStyle(document.querySelector('.map__pin--main'));
+    var x = parseInt(styles.left, 10);
+    var y = parseInt(styles.top, 10) + parseInt(styles.height, 10);
+    addressField.value = 'x: ' + x + ', y: ' + y;
+  };
+
   var inputResidenceType = document.querySelector('#type');
   inputResidenceType.addEventListener('change', onResidenceTypeSelect);
   var inputPrice = document.querySelector('#price');
@@ -87,6 +94,7 @@
   inputCapacityClone.querySelector('option[selected]').removeAttribute('selected');
 
   var addressField = document.querySelector('#address');
+  setInitialPosition();
 
   initialFormSync();
 
