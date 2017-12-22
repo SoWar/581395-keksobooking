@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var PIN_POINTER_SHIFT_Y = Math.round(44 / 2 + 18);
+  var PIN_POINTER_SHIFT_Y = parseInt(window.getComputedStyle(document.querySelector('.map__pin--main')).height, 10);
 
   var createButtonFragment = function (id, advert) {
     var buttonElement = document.createElement('button');
