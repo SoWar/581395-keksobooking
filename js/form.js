@@ -48,16 +48,6 @@
 
   var fieldsets = document.querySelectorAll('form.notice__form fieldset');
 
-  window.form = {
-    activateFormFields: function () {
-      document.querySelector('.map').classList.remove('map--faded');
-      document.querySelector('form.notice__form').classList.remove('notice__form--disabled');
-      for (var i = 0; i < fieldsets.length; i++) {
-        fieldsets[i].disabled = false;
-      }
-    }
-  };
-
   var onResidenceTypeSelect = function (evnt) {
     changeMinResidencePrice(evnt.target.selectedOptions[0].value);
   };
@@ -68,6 +58,13 @@
 
   var onRoomNumberChange = function (evnt) {
     setActiveCapacityOptions(evnt.target.selectedOptions[0].value);
+  };
+
+  var setInitialPosition = function () {
+    var styles = window.getComputedStyle(document.querySelector('.map__pin--main'));
+    var x = parseInt(styles.left, 10);
+    var y = parseInt(styles.top, 10) + parseInt(styles.height, 10);
+    addressField.value = 'x: ' + x + ', y: ' + y;
   };
 
   var inputResidenceType = document.querySelector('#type');
@@ -87,4 +84,19 @@
   inputCapacityClone.querySelector('option[selected]').removeAttribute('selected');
   setActiveCapacityOptions(inputRoomNumber.selectedOptions[0].value);
 
+  var addressField = document.querySelector('#address');
+  setInitialPosition();
+
+  window.form = {
+    activateFormFields: function () {
+      document.querySelector('.map').classList.remove('map--faded');
+      document.querySelector('form.notice__form').classList.remove('notice__form--disabled');
+      for (var i = 0; i < fieldsets.length; i++) {
+        fieldsets[i].disabled = false;
+      }
+    },
+    displayPinCoordinates: function (x, y) {
+      addressField.value = 'x:' + x + ', y:' + y;
+    }
+  };
 })();

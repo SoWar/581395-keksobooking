@@ -76,7 +76,6 @@
 
   window.data = {
     advertisings: getAdvertisings(OFFERTITLES.length)
-
   };
 })();
 
