@@ -60,8 +60,11 @@
     setActiveCapacityOptions(evnt.target.selectedOptions[0].value);
   };
 
-  var setInitialAddress = function () {
-    addressField.value = 'x:' + Math.round(initialMainPinCoords.pointerX) + ', y:' + Math.round(initialMainPinCoords.pointerY);
+  var setInitialPosition = function () {
+    var styles = window.getComputedStyle(document.querySelector('.map__pin--main'));
+    var x = parseInt(styles.left, 10);
+    var y = parseInt(styles.top, 10) + parseInt(styles.height, 10);
+    addressField.value = 'x: ' + x + ', y: ' + y;
   };
 
   var inputResidenceType = document.querySelector('#type');
@@ -81,15 +84,8 @@
   inputCapacityClone.querySelector('option[selected]').removeAttribute('selected');
   setActiveCapacityOptions(inputRoomNumber.selectedOptions[0].value);
 
-  var mainPinCoords = document.querySelector('.map__pin--main').getBoundingClientRect();
-
-  var initialMainPinCoords = {
-    pointerX: window.pageXOffset + mainPinCoords.left - 7.5,
-    pointerY: window.pageYOffset + mainPinCoords.top + mainPinCoords.height + 7.5
-  };
-
   var addressField = document.querySelector('#address');
-  setInitialAddress();
+  setInitialPosition();
 
   window.form = {
     activateFormFields: function () {
