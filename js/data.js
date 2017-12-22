@@ -12,10 +12,6 @@
     errorPopupTemplate.querySelector('.error__popup--message').textContent = errorMsg;
     document.body.insertAdjacentElement('afterbegin', errorPopupTemplate);
 
-    // var onCloseErrorPopup = function () {
-    //   document.body.removeChild(errorPopupTemplate);
-    // };
-
     var errClose = errorPopupTemplate.querySelector('.error__popup--close');
     errClose.addEventListener('click', function () {
       document.body.removeChild(errorPopupTemplate);
@@ -25,6 +21,10 @@
   var errorPopupTemplate = document.querySelector('template.error__template').content.querySelector('div.error__popup');
 
   window.backend.load(loadAds, displayErrorPopup);
+
+  window.data = {
+    displayErrorPopup: displayErrorPopup
+  };
 
 })();
 

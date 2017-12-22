@@ -64,17 +64,42 @@
     window.synchronizeFields(inputRoomNumber, inputCapacity, CAPACITY_RULES, setActiveCapacityOptions);
   };
 
-  var initialFormSync = function () {
+  var syncFormFields = function () {
     window.synchronizeFields(inputResidenceType, inputPrice, MIN_PRICE_RESIDENCE, changeMinResidencePrice);
     window.synchronizeFields(inputTimeIn, inputTimeOut, TIME_INOUT, syncInOutTime);
     window.synchronizeFields(inputRoomNumber, inputCapacity, CAPACITY_RULES, setActiveCapacityOptions);
   };
 
-  var setInitialPosition = function () {
-    var styles = window.getComputedStyle(document.querySelector('.map__pin--main'));
-    var x = parseInt(styles.left, 10);
-    var y = parseInt(styles.top, 10) + parseInt(styles.height, 10);
-    addressField.value = 'x: ' + x + ', y: ' + y;
+  var onLoadData = function () {
+    resetInitialState();
+  };
+
+  var onAdvFormSubmit = function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(newAdvForm), onLoadData, window.data.displayErrorPopup);
+  };
+
+  var getInitialPosition = function () {
+    var styles = window.getComputedStyle(mainPin);
+    var mainPinCoords = {
+      x: parseInt(styles.left, 10),
+      y: parseInt(styles.top, 10)
+    };
+    mainPinCoords.text = 'x: ' + mainPinCoords.x + ', y: ' + (mainPinCoords.y + parseInt(styles.height, 10));
+    return mainPinCoords;
+  };
+
+  var setAddressField = function (value) {
+    addressField.value = value;
+  };
+
+  var resetInitialState = function () {
+    newAdvForm.reset();
+    mainPin.style.left = mainPinCoords.x + 'px';
+    mainPin.style.top = mainPinCoords.y + 'px';
+    avatar.src = 'img/muffin.png';
+    setAddressField(mainPinCoords.text);
+    syncFormFields();
   };
 
   var inputResidenceType = document.querySelector('#type');
@@ -93,10 +118,17 @@
   var inputCapacityClone = inputCapacity.cloneNode(true);
   inputCapacityClone.querySelector('option[selected]').removeAttribute('selected');
 
-  var addressField = document.querySelector('#address');
-  setInitialPosition();
+  var newAdvForm = document.querySelector('.notice__form');
+  newAdvForm.addEventListener('submit', onAdvFormSubmit);
 
-  initialFormSync();
+  var addressField = document.querySelector('#address');
+  var mainPin = document.querySelector('.map__pin--main');
+  var mainPinCoords = getInitialPosition();
+  setAddressField(mainPinCoords.text);
+
+  var avatar = document.querySelector('.notice__preview img');
+
+  syncFormFields();
 
   window.form = {
     activateFormFields: function () {
