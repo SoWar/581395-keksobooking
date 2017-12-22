@@ -43,11 +43,8 @@
     load: function (onLoad, onError) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
-
       addRequestListners(xhr, onLoad, onError);
-
       xhr.timeout = 10000;
-
       xhr.open('GET', LOAD_URL);
       xhr.send();
     },
@@ -55,6 +52,7 @@
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
       addRequestListners(xhr, onLoad, onError);
+      xhr.timeout = 10000;
       xhr.open('POST', SEND_URL);
       xhr.send(data);
     }
